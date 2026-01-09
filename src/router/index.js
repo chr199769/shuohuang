@@ -4,7 +4,9 @@ import Console from '../views/Console.vue';
 import DeviceRegistration from '../views/DeviceRegistration.vue';
 import WarningManagement from '../views/WarningManagement.vue';
 import WarningSettings from '../views/WarningSettings.vue';
+import Permission from '../views/Permission.vue';
 import Login from '../views/Login.vue';
+import { ElMessage } from 'element-plus';
 
 const routes = [
   {
@@ -22,7 +24,8 @@ const routes = [
       { path: 'console', name: 'Console', component: Console },
       { path: 'device-registration', name: 'DeviceRegistration', component: DeviceRegistration },
       { path: 'warning-management', name: 'WarningManagement', component: WarningManagement },
-      { path: 'warning-setting', name: 'WarningSettings', component: WarningSettings }
+      { path: 'warning-setting', name: 'WarningSettings', component: WarningSettings },
+      { path: 'permission', name: 'WarningSettings', component: Permission }
     ]
   }
 ];

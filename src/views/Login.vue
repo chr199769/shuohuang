@@ -231,17 +231,25 @@ const handleLogin = () => {
       // 模拟登录API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // 保存用户信息到localStorage
-      localStorage.setItem('userInfo', JSON.stringify({
-        username: loginForm.username,
-        loginTime: new Date().toISOString()
-      }));
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const user = users.find(u => u.username === loginForm.username && u.password === loginForm.password);
       
-      ElMessage.success('登录成功');
-      // 跳转到控制台页面
-      router.push('/console');
+      if (user) {
+        // 保存用户信息到localStorage
+        localStorage.setItem('userInfo', JSON.stringify({
+          username: user.username,
+          role: user.role,
+          loginTime: new Date().toISOString()
+        }));
+        
+        ElMessage.success('登录成功');
+        // 跳转到控制台页面
+        router.push('/console');
+      } else {
+        throw new Error('用户名或密码错误');
+      }
     } catch (error) {
-      ElMessage.error('登录失败，请检查账户信息');
+      ElMessage.error(error.message || '登录失败，请检查账户信息');
     } finally {
       loading.value = false;
     }
@@ -258,11 +266,26 @@ const handleRegister = () => {
       // 模拟注册API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      if (users.find(u => u.username === registerForm.username)) {
+        throw new Error('用户名已存在');
+      }
+      
+      // 添加新用户，默认权限为普通用户
+      users.push({
+        username: registerForm.username,
+        password: registerForm.password,
+        phone: registerForm.phone,
+        role: 'user'
+      });
+      
+      localStorage.setItem('users', JSON.stringify(users));
+      
       ElMessage.success('注册成功，请登录');
       // 切换到登录页面
       switchToLogin();
     } catch (error) {
-      ElMessage.error('注册失败，请重试');
+      ElMessage.error(error.message || '注册失败，请重试');
     } finally {
       loading.value = false;
     }
