@@ -244,7 +244,7 @@ const handleLogin = () => {
         
         ElMessage.success('登录成功');
         // 跳转到控制台页面
-        router.push('/console');
+        router.push('/');
       } else {
         throw new Error('用户名或密码错误');
       }

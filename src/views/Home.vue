@@ -2,10 +2,12 @@
   <div class="home">
     <aside class="sidebar">
       <nav>
-        <router-link to="/console">控制台</router-link>
-        <router-link to="/device-registration">设备登记</router-link>
-        <router-link to="/warning-setting">预警设置</router-link>
-        <router-link to="/warning-management">预警管理</router-link>
+        <router-link to="/business">
+          业务数据
+        </router-link>
+        <router-link to="/device">
+          设备数据
+        </router-link>
         <router-link 
           v-if="userRole === 'admin' || userRole === 'super_admin'" 
           to="/permission"
