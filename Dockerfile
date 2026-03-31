@@ -19,14 +19,22 @@ RUN npm run build
 # 生产阶段
 FROM nginx:stable-alpine as production-stage
 
+# 安装 openssl 并生成自签名证书（用于本地 HTTPS）
+RUN apk add --no-cache openssl \
+  && mkdir -p /etc/nginx/ssl \
+  && openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/nginx/ssl/selfsigned.key \
+    -out /etc/nginx/ssl/selfsigned.crt \
+    -subj "/CN=localhost"
+
 # 从构建阶段复制构建结果到nginx目录
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # 复制nginx配置文件
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# 暴露80端口
-EXPOSE 80
+# 暴露80和443端口（HTTP 和 HTTPS）
+EXPOSE 80 443
 
 # 启动nginx
 CMD ["nginx", "-g", "daemon off;"]
